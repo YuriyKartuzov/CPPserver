@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     int localSocket, remoteSocket, port = 4097;                               
 
     struct  sockaddr_in localAddr, remoteAddr;
-    //pthread_t thread_id;
+    pthread_t thread_id;
               
     int addrLen = sizeof(struct sockaddr_in);
        
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
         exit(1);
     } 
     std::cout << "Connection accepted" << std::endl;
-     //pthread_create(&thread_id,NULL,display,&remoteSocket);
+     pthread_create(&thread_id, NULL, display, &remoteSocket);
 
      //pthread_join(thread_id,NULL);
 
@@ -92,10 +92,10 @@ void *display(void *ptr){
 
     Mat img, imgGray;
     img = Mat::zeros(480 , 640, CV_8UC1);   
-     //make it continuous
-    if (!img.isContinuous()) {
-        img = img.clone();
-    }
+    //  //make it continuous
+    // if (!img.isContinuous()) {
+    //     img = img.clone();
+    // }
 
     int imgSize = img.total() * img.elemSize();
     int bytes = 0;
@@ -103,25 +103,22 @@ void *display(void *ptr){
     
 
     //make img continuos
-    if ( ! img.isContinuous() ) { 
-          img = img.clone();
-          imgGray = img.clone();
-    }
+    // if ( ! img.isContinuous() ) { 
+    //       img = img.clone();
+    //       imgGray = img.clone();
+    // }
         
     std::cout << "Image Size:" << imgSize << std::endl;
 
-    while(1) {
-                
-            /* get a frame from camera */
-                cap >> img;
-            
-                //do video processing here 
-                cvtColor(img, imgGray, CV_BGR2GRAY);
-
-                //send processed image
-                if ((bytes = send(socket, imgGray.data, imgSize, 0)) < 0){
-                     std::cerr << "bytes = " << bytes << std::endl;
-                     break;
-                } 
+    while(1) {  
+        cap >> img;
+        //do video processing here 
+        //cvtColor(img, imgGray, CV_BGR2GRAY);
+        //send processed image
+        if ((bytes = send(socket, img.data, imgSize, 0)) < 0){
+                std::cerr << "bytes = " << bytes << std::endl;
+                break;
+        } 
     }
+    return 0;
 }
