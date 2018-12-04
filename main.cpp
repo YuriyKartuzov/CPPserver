@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     int localSocket, remoteSocket, port = 4097;                               
 
     struct  sockaddr_in localAddr, remoteAddr;
-    pthread_t thread_id;
+    //pthread_t thread_id;
               
     int addrLen = sizeof(struct sockaddr_in);
        
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
         exit(1);
     } 
     std::cout << "Connection accepted" << std::endl;
-     pthread_create(&thread_id,NULL,display,&remoteSocket);
+     //pthread_create(&thread_id,NULL,display,&remoteSocket);
 
      //pthread_join(thread_id,NULL);
 
